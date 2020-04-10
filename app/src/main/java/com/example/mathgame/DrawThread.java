@@ -75,8 +75,8 @@ class DrawThread extends Thread {
                 ans = null;
 
                 for (Ans i:ans_list) {
-                    if (x >= i.x-25 && x <= i.x+100 &&
-                            y >= i.y-125 && y <= i.y+50)
+                    if (x >= i.x-50 && x <= i.x+125 &&
+                            y >= i.y-150 && y <= i.y+75)
                     {
                         ans = i;
                         break;
@@ -116,7 +116,7 @@ class DrawThread extends Thread {
                     else {
                         for (int l = 0; l < tasks.length; l++) {
 
-                            if (x >= tasks[l].posx - 50 && x <= tasks[l].posx + 350 &&
+                            if (x >= tasks[l].posx - 50 && x <= tasks[l].posx + 400 &&
                                     y >= tasks[l].posy - 50 && y <= tasks[l].posy + 100) {
 
                                 if (tasks[l].color == Color.RED && tasks[l].ans.equals(ans.ans)) {
@@ -154,7 +154,7 @@ class DrawThread extends Thread {
                 break;
 
             case MotionEvent.ACTION_CANCEL:
-                System.out.println("СБОЙ БЛЯДЬ");
+                System.out.println("СБОЙ");
                 break;
         }
     }
