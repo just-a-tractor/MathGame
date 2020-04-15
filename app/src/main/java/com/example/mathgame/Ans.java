@@ -7,6 +7,7 @@ public class Ans {
     String ans;
     float x, y; // normal cords
     float s_x, s_y; // spring cords
+    float d_x, d_y; // normal-touch cords
     double sx, sy; // normal speed
     double sx1, sy1; // default speed
     boolean spring;
@@ -50,5 +51,4 @@ public class Ans {
             y += sy;
         canvas.drawText(ans, x, y, paint);
     }
-
 }

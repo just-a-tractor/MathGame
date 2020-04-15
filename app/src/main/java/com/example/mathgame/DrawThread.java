@@ -23,6 +23,8 @@ class DrawThread extends Thread {
     private Ans ans;
     private float xz;
     private float yz;
+    float deltax;
+    float deltay;
 
     private float left;
     private float top;
@@ -128,11 +130,14 @@ class DrawThread extends Thread {
                 }
 
                 try {
-                    xz = ans.x;
-                    yz = ans.y;
+                    deltax = ans.x - x;
+                    deltay = ans.y - y;
 
-                    ans.x = x;
-                    ans.y = y;
+                    xz = ans.x + deltax;
+                    yz = ans.y + deltay;
+
+                    ans.x = x + deltax;
+                    ans.y = y + deltay;
                     ans.sx = 0;
                     ans.sy = 0;
                 }
@@ -141,8 +146,8 @@ class DrawThread extends Thread {
                 break;
             case MotionEvent.ACTION_MOVE: // движение
                 try {
-                    ans.x = x;
-                    ans.y = y;
+                    ans.x = x + deltax;
+                    ans.y = y + deltay;
                 }
                 catch (Exception ignored) {}
                 break;
