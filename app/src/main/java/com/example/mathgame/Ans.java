@@ -7,8 +7,7 @@ public class Ans {
     String ans;
     float x, y; // normal cords
     float s_x, s_y; // spring cords
-    float d_x, d_y; // normal-touch cords
-    double sx, sy; // normal speed
+    double sx, sy; // present speed
     double sx1, sy1; // default speed
     boolean spring;
     public Ans(String a, float x, float y, double sx, double sy) {
@@ -42,7 +41,7 @@ public class Ans {
          }
 
         if (!spring) {
-            if (x > right - 100 || x < left)
+            if (x > right - 100*ans.length() || x < left)
                 sx = -sx;
             if (y > bottom || y < top + 150)
                 sy = -sy;
@@ -50,5 +49,9 @@ public class Ans {
             x += sx;
             y += sy;
         canvas.drawText(ans, x, y, paint);
+    }
+    @Override
+    public String toString() {
+        return "ans: " + ans;
     }
 }

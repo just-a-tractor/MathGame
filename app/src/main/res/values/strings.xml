@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">MathGame</string>
+
+    <string name="title_activity_game">Game</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="button">OK</string>
+    <string name="none">-NO-DATA-</string>
+    <string name="easy"><![CDATA[Easy(a + b <= 10)]]></string>
+    <string name="medium"><![CDATA[Medium(a +- b <= 10)]]></string>
+    <string name="hard"><![CDATA[Hard(a +- b <= 20)]]></string>
+    <string name="impossible"><![CDATA[IMPOSSIBLE(a +- b <= 100)]]></string>
+    <string name="twenty">20 tasks</string>
+    <string name="ten">10 tasks</string>
+    <string name="thirty">30 tasks</string>
+    <string name="forty">40 tasks</string>
+    <string name="fifty">50 tasks</string>
 </resources>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:name=".MyActivity"
+    android:theme="@android:style/Theme.NoTitleBar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Menu">
+
+    <Button
+        android:id="@+id/main_btn"
+        android:layout_width="133dp"
+        android:layout_height="61dp"
+        android:text="@string/button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <RadioGroup
+        android:id="@+id/radio1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/main_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/easy"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/medium"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hard"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/impossible"
+            android:textSize="17sp"
+            android:textColor="@color/black_overlay" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/radio2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/main_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButton1s"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/ten"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton2s"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/twenty"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton3s"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/thirty"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton4s"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/forty"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+
+        <RadioButton
+            android:id="@+id/radioButton5s"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fifty"
+            android:textSize="20sp"
+            android:textColor="@color/black_overlay" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

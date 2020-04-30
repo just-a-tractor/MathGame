@@ -1,14 +1,20 @@
 package com.example.mathgame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 class DrawThread extends Thread {
 
@@ -18,6 +24,10 @@ class DrawThread extends Thread {
     private volatile boolean running = true;
     private Paint backgroundPaint = new Paint();
 
+
+    int cheat;
+
+
     private boolean flag = true;
 
     private Ans ans;
@@ -25,6 +35,14 @@ class DrawThread extends Thread {
     private float yz;
     float deltax;
     float deltay;
+
+    int verbs = 0;
+    int mistakes = 0;
+
+    Context mainActivity;
+    int n;
+    int bound;
+    boolean minus;
 
     private float left;
     private float top;
@@ -34,30 +52,81 @@ class DrawThread extends Thread {
     private Ans[] ans_list;
     private Task[] tasks;
     private Task show_task;
+    private ArrayList<Ans> show_ans = new ArrayList<Ans>();
     java.util.Random random = new java.util.Random();
+
+    long currentTime;
 
     ProgressBar prog;
 
+    void win(){
+        Intent intent = new Intent(mainActivity, win.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("1", verbs);
+        bundle.putInt("2", mistakes);
+        bundle.putLong("3", Calendar.getInstance().getTimeInMillis() - currentTime);
+        intent.putExtras(bundle);
+        mainActivity.startActivity(intent);
+        this.running = false;
+    }
 
+    String[] task_gen(int n, int bound, boolean minus){
+
+        String[] ans = new String[n];
+
+        for (int i=0; i<n; i++){
+            String sign = (minus ? (new String[]{"-", "+"}[random.nextInt(2)]) : "+");
+
+            int a = random.nextInt(bound-1)+1;
+            int b = random.nextInt(bound-a)+1;
+
+            ans[i] = (a>= b ? a + " " + b + " " + sign : b + " " + a + " " + sign);
+        }
+        return ans;
+    }
 
     void create(Canvas canvas, Paint pb, Paint pb1, int ans_speed) {
         prog = new ProgressBar(canvas, left, right, top, bottom, pb, pb1, 0.0);
 
-        String[] t_l = new String[]{"4 + 5 = __", "5 + 3 = __", "6 - 4 = __",
-                "9 - 2 = __", "2 + 6 = __", "7 - 4 = __"};
-        String[] t_l1 = new String[]{"9", "8", "2", "7", "8", "3"};
-        tasks = new Task[t_l.length];
+        String[] raw = task_gen(n, bound, minus);
 
+        String[] t_l = new String[n];
+        String[] test_l = new String[n];
+
+        ArrayList<String> t_l1 = new ArrayList<String>();
+        for (int a=0; a<n; a++) {
+            String first = raw[a].split(" ")[0];
+            String second = raw[a].split(" ")[1];
+            String sign = raw[a].split(" ")[2];
+
+            /*a>= b ? (String.valueOf(a).length() == 2 ? a: " "+a) + " " +
+                    (String.valueOf(b).length() == 2 ? b: " "+b) + " " + sign
+                    (String.valueOf(b).length() == 2 ? b: " "+b) + " " +
+                            (String.valueOf(a).length() == 2 ? a: " "+a) + " " + sign*/
+
+            t_l[a] = first + (first.length() == 1 ? " " : "") + sign +
+                    (second.length() == 1 ? " " : "") + second + " = __";
+
+            String ans1 = sign.equals("+") ? Integer.parseInt(first) + Integer.parseInt(second)+"" :
+                    Integer.parseInt(first) - Integer.parseInt(second)+"";
+
+            if (!t_l1.contains(ans1))
+                t_l1.add(ans1);
+            test_l[a] = ans1;
+        }
+        tasks = new Task[n];
+        String[] t_l1s = new String[t_l1.size()];
+        t_l1s = t_l1.toArray(t_l1s);
 
         for (int i = 0; i<t_l.length; i++){
-            tasks[i] = new Task(t_l[i], t_l1[i], Color.BLACK,
+            tasks[i] = new Task(t_l[i], test_l[i], Color.BLACK,
                     left + canvas.getWidth()/50,
                     bottom + canvas.getHeight()/10 + (canvas.getHeight()/15));
         }
 
         show_task = new Task(tasks[random.nextInt(tasks.length)]);
 
-        String[] a_l = new String[]{"9", "2", "7", "8", "3"};
+        String[] a_l = t_l1s.clone();
         ans_list = new Ans[a_l.length];
         for(int i = 0; i<a_l.length; i++){
             double a = (Math.random()*ans_speed*2)-ans_speed;
@@ -67,23 +136,46 @@ class DrawThread extends Thread {
                 a = (Math.random()*ans_speed/2) + 1;
                 b = (Math.random()*ans_speed/2) + 1;
             }
-            ans_list[i] = new Ans(a_l[i], (int)(left + Math.random()*(right-100-left)),
+            ans_list[i] = new Ans(a_l[i], (int)(left + Math.random()*(right-100*a_l[i].length()-left)),
                     (int)(top + 150 + Math.random()*(bottom-top-150)), b, a);
         }
+
+        for (Ans i:ans_list) {
+            if(i.ans.equals(show_task.ans)) {
+                show_ans.add(i);
+                break;
+            }
+        }
+        for (int i = 1; i<(ans_list.length > 5 ? 5 : ans_list.length); i++) {
+            int r = random.nextInt(ans_list.length);
+            if (!ans_list[r].ans.equals(show_task.ans) && !show_ans.contains(ans_list[r])) {
+                show_ans.add(ans_list[r]);
+            }
+            else {
+                i--;
+            }
+        }
         flag = false;
+        currentTime = Calendar.getInstance().getTimeInMillis();
     }
 
 
 
-    private void hit(Vibrator v) {
-        v.vibrate(275);
+    private void hit(Vibrator v, boolean change) {
+        long[] mVibratePattern = new long[]{0, 50};
+        v.vibrate(mVibratePattern, -1);
+        if (change)
         prog.proc += (100.0 / tasks.length);
+        verbs++;
     }
 
 
-    private void miss(Vibrator v) {
-        v.vibrate(50);
+    private void miss(Vibrator v, boolean change) {
+        long[] mVibratePattern = new long[]{0, 100, 50, 275};
+        v.vibrate(mVibratePattern, -1);
+        if (change)
         prog.proc -= (100.0 / tasks.length);
+        mistakes++;
     }
 
     void ret(Ans a, float x, float y) {
@@ -99,9 +191,13 @@ class DrawThread extends Thread {
     }
 
 
-    DrawThread(Context context, SurfaceHolder surfaceHolder) {
+    DrawThread(Context context, SurfaceHolder surfaceHolder, int n, int bound, boolean minus) {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile);
         this.surfaceHolder = surfaceHolder;
+        this.n = n;
+        this.bound = bound;
+        this.minus = minus;
+        this.mainActivity = context;
     }
 
 
@@ -118,26 +214,49 @@ class DrawThread extends Thread {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // нажатие
 
+                if(x <= left && y <= top && cheat == 0){
+                    cheat = 1;
+                }
+                if(x >= right && y <= top && cheat == 1){
+                    cheat = 2;
+                }
+                if(x <= left && y <= top && cheat == 2){
+                    cheat = 3;
+                }
+                if(x >= right && y <= top && cheat == 3){
+                    cheat = 0;
+                    prog.proc = (prog.proc < 50 ? 50 : 100);
+                    hit(v, false);
+                }
+
                 ans = null;
 
-                for (Ans i:ans_list) {
-                    if (x >= i.x-50 && x <= i.x+125 &&
+                for (Ans i:show_ans) {
+                    if (x >= i.x-50 && x <= i.x+125*i.ans.length() &&
                             y >= i.y-150 && y <= i.y+75)
                     {
                         ans = i;
                         break;
                     }
                 }
-
+                if (ans == null || ans.ans.equals("")) {
+                    break;
+                }
                 try {
                     deltax = ans.x - x;
                     deltay = ans.y - y;
 
-                    xz = ans.x + deltax;
-                    yz = ans.y + deltay;
+                    if (ans.x > left && ans.x < right-100*ans.ans.length() && ans.y < bottom && ans.y > top+150) {
+                        xz = ans.x;
+                        yz = ans.y;
+                    }
 
                     ans.x = x + deltax;
                     ans.y = y + deltay;
+                    if (!ans.spring) {
+                        ans.sx1 = ans.sx;
+                        ans.sy1 = ans.sy;
+                    }
                     ans.sx = 0;
                     ans.sy = 0;
                 }
@@ -146,6 +265,18 @@ class DrawThread extends Thread {
                 break;
             case MotionEvent.ACTION_MOVE: // движение
                 try {
+
+                    if (!ans.ans.equals("") && x >= left && x <= right &&
+                            y >= bottom + top / 2 && y <= bottom + top*2.5) {
+                        show_task.color = Color.RED;
+                    }
+
+                    if (!(!ans.ans.equals("") && x >= left && x <= right &&
+                            y >= bottom + top / 2 && y <= bottom + top*2.5)) {
+                        show_task.color = Color.BLACK;
+                    }
+
+
                     ans.x = x + deltax;
                     ans.y = y + deltay;
                 }
@@ -155,30 +286,30 @@ class DrawThread extends Thread {
 
                 try {
 
-                    if (x > left && x < right-100 && y < bottom && y > top+150) {
+                    if (ans.x > left && ans.x < right-100*ans.ans.length() && ans.y < bottom && ans.y > top+150) {
                         ans.sx = ans.sx1;
                         ans.sy = ans.sy1;
                     }
 
                     else {
-                        if (x >= right-3*left && x <= right-left &&
-                                    y >= show_task.y - 150 && y <= show_task.y + 75) {
+                        if (x >= left && x <= right &&
+                                y >= bottom + top / 2 && y <= bottom + top*2.5) {
 
-                                if (!show_task.lock && show_task.ans.equals(ans.ans)) {
-                                    hit(v);
+                            if (!show_task.lock && show_task.ans.equals(ans.ans)) {
+                                hit(v, true);
+                                show_task.lock = true;
+                                ret(ans, xz, yz);
+                                throw new NullPointerException();
+                            } else {
+                                if (!ans.ans.equals("") && !show_task.lock) {
+                                    miss(v, true);
                                     show_task.lock = true;
                                     ret(ans, xz, yz);
-                                    throw new NullPointerException();
-                                } else {
-                                    if (!ans.ans.equals("") && !show_task.lock) {
-                                        miss(v);
-                                        show_task.lock = true;
-                                        ret(ans, xz, yz);
-                                    }
-                                    else ans.spring(xz, yz);
-                                    throw new NullPointerException();
                                 }
+                                else ans.spring(xz, yz);
+                                throw new NullPointerException();
                             }
+                        }
                         ans.spring(xz, yz);
                     }
                 }
@@ -192,17 +323,16 @@ class DrawThread extends Thread {
     }
 
 
-
     @Override
     public void run() {
 
         int ans_speed = 3;
 
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize(200);
+        textPaint.setTextSize(175);
 
         Paint ansPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        ansPaint.setTextSize(200);
+        ansPaint.setTextSize(175);
         ansPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         ansPaint.getStrokeCap();
         ansPaint.setColor(Color.RED);
@@ -241,17 +371,35 @@ class DrawThread extends Thread {
 
                     canvas.drawRect(left, top, right, bottom, rec);
 
-                    prog.draw();
+                    boolean w = prog.draw();
+                    if(w)win();
 
                     show_task.draw(canvas, textPaint);
                     int a = random.nextInt(tasks.length);
                     if (tasks[a].solved_task.equals(show_task.solved_task)) {
                         a = random.nextInt(tasks.length);
                     }
-                    if (show_task.lock)
+                    if (show_task.lock) {
                         show_task = new Task(tasks[a]);
+                        show_ans.clear();
+                        for (Ans i:ans_list) {
+                            if(i.ans.equals(show_task.ans)) {
+                                show_ans.add(i);
+                                break;
+                            }
+                        }
+                        for (int i = 1; i<(ans_list.length > 5 ? 5 : ans_list.length); i++) {
+                            int r = random.nextInt(ans_list.length);
+                            if (!ans_list[r].ans.equals(show_task.ans) && !show_ans.contains(ans_list[r])) {
+                                show_ans.add(ans_list[r]);
+                            }
+                            else {
+                                i--;
+                            }
+                        }
+                    }
 
-                    for (Ans i:ans_list) {
+                    for (Ans i: show_ans) {
                         i.draw(canvas, ansPaint, top, bottom, left, right);
                     }
                 } finally {

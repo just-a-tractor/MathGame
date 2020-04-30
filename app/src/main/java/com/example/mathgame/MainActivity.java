@@ -3,14 +3,16 @@ package com.example.mathgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new MathGame(this));
+        Bundle bundle = getIntent().getExtras();
+        int n = bundle.getInt("stuff1");
+        int bound = bundle.getInt("stuff2");
+        boolean minus = bundle.getBoolean("stuff3");
+        setContentView(new MathGame(this, n, bound, minus));
     }
 }
