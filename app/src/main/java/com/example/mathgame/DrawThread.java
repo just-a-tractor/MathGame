@@ -2,8 +2,6 @@ package com.example.mathgame;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,7 +12,6 @@ import android.view.SurfaceHolder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 class DrawThread extends Thread {
 
@@ -25,7 +22,7 @@ class DrawThread extends Thread {
     private Paint backgroundPaint = new Paint();
 
 
-    int cheat;
+    private int cheat;
 
 
     private boolean flag = true;
@@ -33,16 +30,16 @@ class DrawThread extends Thread {
     private Ans ans;
     private float xz;
     private float yz;
-    float deltax;
-    float deltay;
+    private float deltax;
+    private float deltay;
 
-    int verbs = 0;
-    int mistakes = 0;
+    private int verbs = 0;
+    private int mistakes = 0;
 
-    Context mainActivity;
-    int n;
-    int bound;
-    boolean minus;
+    private Context mainActivity;
+    private int n;
+    private int bound;
+    private boolean minus;
 
     private float left;
     private float top;
@@ -52,40 +49,51 @@ class DrawThread extends Thread {
     private Ans[] ans_list;
     private Task[] tasks;
     private Task show_task;
-    private ArrayList<Ans> show_ans = new ArrayList<Ans>();
-    java.util.Random random = new java.util.Random();
+    private ArrayList<Ans> show_ans = new ArrayList<>();
+    private java.util.Random random = new java.util.Random();
 
-    long currentTime;
+    private long currentTime;
 
-    ProgressBar prog;
+    private ProgressBar prog;
 
-    void win(){
+    private void win(){
         Intent intent = new Intent(mainActivity, win.class);
         Bundle bundle = new Bundle();
+
+        String difficult = !minus ? "easy_mode" : (bound == 10 ? "medium_mode" : (bound == 20 ? "hard_mode" : "impossible_mode"));
+
         bundle.putInt("1", verbs);
         bundle.putInt("2", mistakes);
-        bundle.putLong("3", Calendar.getInstance().getTimeInMillis() - currentTime);
+        bundle.putDouble("3", (Calendar.getInstance().getTimeInMillis() - currentTime)/ 1000.0);
+        bundle.putString("4", difficult);
         intent.putExtras(bundle);
         mainActivity.startActivity(intent);
         this.running = false;
     }
 
-    String[] task_gen(int n, int bound, boolean minus){
+    private String[] task_gen(int n, int bound, boolean minus){
 
         String[] ans = new String[n];
 
         for (int i=0; i<n; i++){
             String sign = (minus ? (new String[]{"-", "+"}[random.nextInt(2)]) : "+");
-
-            int a = random.nextInt(bound-1)+1;
-            int b = random.nextInt(bound-a)+1;
-
-            ans[i] = (a>= b ? a + " " + b + " " + sign : b + " " + a + " " + sign);
+            if (sign.equals("+")) {
+                int c = random.nextInt(bound - 1) + 2;
+                int a = random.nextInt(c - 1) + 1;
+                int b = c - a;
+                ans[i] = (a >= b ? a + " " + b + " " + sign : b + " " + a + " " + sign);
+            }
+            else {
+                int a = random.nextInt(bound - 1) + 2;
+                int c = random.nextInt(a - 1) + 1;
+                int b = a - c;
+                ans[i] = (b >= c ? b + " " + c + " " + sign : c + " " + b + " " + sign);
+            }
         }
         return ans;
     }
 
-    void create(Canvas canvas, Paint pb, Paint pb1, int ans_speed) {
+    private void create(Canvas canvas, Paint pb, Paint pb1, int ans_speed) {
         prog = new ProgressBar(canvas, left, right, top, bottom, pb, pb1, 0.0);
 
         String[] raw = task_gen(n, bound, minus);
@@ -93,19 +101,11 @@ class DrawThread extends Thread {
         String[] t_l = new String[n];
         String[] test_l = new String[n];
 
-        ArrayList<String> t_l1 = new ArrayList<String>();
+        ArrayList<String> t_l1 = new ArrayList<>();
         for (int a=0; a<n; a++) {
             String first = raw[a].split(" ")[0];
             String second = raw[a].split(" ")[1];
             String sign = raw[a].split(" ")[2];
-
-            /*a>= b ? (String.valueOf(a).length() == 2 ? a: " "+a) + " " +
-                    (String.valueOf(b).length() == 2 ? b: " "+b) + " " + sign
-                    (String.valueOf(b).length() == 2 ? b: " "+b) + " " +
-                            (String.valueOf(a).length() == 2 ? a: " "+a) + " " + sign*/
-
-            t_l[a] = first + (first.length() == 1 ? " " : "") + sign +
-                    (second.length() == 1 ? " " : "") + second + " = __";
 
             String ans1 = sign.equals("+") ? Integer.parseInt(first) + Integer.parseInt(second)+"" :
                     Integer.parseInt(first) - Integer.parseInt(second)+"";
@@ -113,6 +113,8 @@ class DrawThread extends Thread {
             if (!t_l1.contains(ans1))
                 t_l1.add(ans1);
             test_l[a] = ans1;
+            t_l[a] = first + (first.length() == 1 ? " " : "") + sign +
+                    (second.length() == 1 ? " " : "") + second + " = __";
         }
         tasks = new Task[n];
         String[] t_l1s = new String[t_l1.size()];
@@ -178,7 +180,7 @@ class DrawThread extends Thread {
         mistakes++;
     }
 
-    void ret(Ans a, float x, float y) {
+    private void ret(Ans a, float x, float y) {
         a.sx = a.sx1;
         a.sy = a.sy1;
         a.x = x;
@@ -192,7 +194,6 @@ class DrawThread extends Thread {
 
 
     DrawThread(Context context, SurfaceHolder surfaceHolder, int n, int bound, boolean minus) {
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile);
         this.surfaceHolder = surfaceHolder;
         this.n = n;
         this.bound = bound;
@@ -213,20 +214,36 @@ class DrawThread extends Thread {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // нажатие
-
-                if(x <= left && y <= top && cheat == 0){
+                if(cheat == 0){
+                    if(x <= left && y <= top)
                     cheat = 1;
                 }
-                if(x >= right && y <= top && cheat == 1){
-                    cheat = 2;
+                else if(cheat == 1){
+                    if (x <= left && y <= top)
+                        cheat = 2;
+                    else
+                        cheat=0;
                 }
-                if(x <= left && y <= top && cheat == 2){
-                    cheat = 3;
+                else if(cheat == 2){
+                    if (x >= right && y <= top)
+                        cheat = 3;
+                    else
+                        cheat=0;
                 }
-                if(x >= right && y <= top && cheat == 3){
-                    cheat = 0;
-                    prog.proc = (prog.proc < 50 ? 50 : 100);
-                    hit(v, false);
+                else if(cheat == 3){
+                    if (x >= right && y <= top)
+                        cheat = 4;
+                    else
+                        cheat=0;
+                }
+                else if(cheat == 4){
+                    if (x <= left && y <= top) {
+                        cheat = 0;
+                        prog.proc = (prog.proc < 50 ? 50 : 100);
+                        hit(v, false);
+                    }
+                    else
+                        cheat = 0;
                 }
 
                 ans = null;
