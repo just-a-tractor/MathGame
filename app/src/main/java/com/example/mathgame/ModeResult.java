@@ -7,7 +7,6 @@ class ModeResult {
     String speed = "";
 
     public String toString() {
-
         return "head :" + head + " q :" + q + " mistakes: " + mistakes + " speed: " + speed;
     }
 }
