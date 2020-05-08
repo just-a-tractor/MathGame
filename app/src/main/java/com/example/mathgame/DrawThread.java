@@ -32,6 +32,12 @@ class DrawThread extends Thread {
     private float yz;
     private float deltax;
     private float deltay;
+    private double ans_speed;
+    private Paint rec;
+    private Paint textPaint;
+    private Paint ansPaint;
+    private Paint pb;
+    private Paint pb1;
 
     private int verbs = 0;
     private int mistakes = 0;
@@ -45,6 +51,9 @@ class DrawThread extends Thread {
     private float top;
     private float bottom;
     private float right;
+
+    private double width_one;
+    private double height_one;
 
     private Ans[] ans_list;
     private Task[] tasks;
@@ -93,7 +102,36 @@ class DrawThread extends Thread {
         return ans;
     }
 
-    private void create(Canvas canvas, Paint pb, Paint pb1, int ans_speed) {
+    private void create(Canvas canvas) {
+
+        System.out.println(width_one);
+
+        ans_speed = (3*(width_one));
+
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTextSize((int)(left*1.7)); // 175
+
+        ansPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        ansPaint.setTextSize((int)(left*1.7)); // 175
+        ansPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        ansPaint.getStrokeCap();
+        ansPaint.setColor(Color.RED);
+
+        rec = new Paint(Paint.ANTI_ALIAS_FLAG);
+        rec.setTextSize(left); // 100
+        rec.setStyle(Paint.Style.STROKE);
+        rec.setColor(Color.GREEN);
+        rec.setStrokeWidth(left / 20); // 5
+
+        pb = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pb.setStyle(Paint.Style.STROKE);
+        pb.setColor(Color.BLACK);
+        pb.setStrokeWidth(left / 13); // 8
+
+        pb1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pb1.setStyle(Paint.Style.FILL);
+        pb1.setColor(Color.GREEN);
+
         prog = new ProgressBar(canvas, left, right, top, bottom, pb, pb1, 0.0);
 
         String[] raw = task_gen(n, bound, minus);
@@ -138,8 +176,8 @@ class DrawThread extends Thread {
                 a = (Math.random()*ans_speed/2) + 1;
                 b = (Math.random()*ans_speed/2) + 1;
             }
-            ans_list[i] = new Ans(a_l[i], (int)(left + Math.random()*(right-100*a_l[i].length()-left)),
-                    (int)(top + 150 + Math.random()*(bottom-top-150)), b, a);
+            ans_list[i] = new Ans(a_l[i], (int)(left + Math.random()*(right-100*width_one*a_l[i].length()-left)),
+                    (int)(top + 150*height_one + Math.random()*(bottom-top-150*height_one)), b, a, width_one, height_one);
         }
 
         for (Ans i:ans_list) {
@@ -249,8 +287,8 @@ class DrawThread extends Thread {
                 ans = null;
 
                 for (Ans i:show_ans) {
-                    if (x >= i.x-50 && x <= i.x+125*i.ans.length() &&
-                            y >= i.y-150 && y <= i.y+75)
+                    if (x >= i.x-50*width_one && x <= i.x+125*width_one*i.ans.length() &&
+                            y >= i.y-150*height_one && y <= i.y+75*height_one)
                     {
                         ans = i;
                         break;
@@ -263,7 +301,7 @@ class DrawThread extends Thread {
                     deltax = ans.x - x;
                     deltay = ans.y - y;
 
-                    if (ans.x > left && ans.x < right-100*ans.ans.length() && ans.y < bottom && ans.y > top+150) {
+                    if (ans.x > left && ans.x < right-100*width_one*ans.ans.length() && ans.y < bottom && ans.y > top+150*height_one) {
                         xz = ans.x;
                         yz = ans.y;
                     }
@@ -303,7 +341,7 @@ class DrawThread extends Thread {
 
                 try {
 
-                    if (ans.x > left && ans.x < right-100*ans.ans.length() && ans.y < bottom && ans.y > top+150) {
+                    if (ans.x > left && ans.x < right-100*width_one*ans.ans.length() && ans.y < bottom && ans.y > top+150*height_one) {
                         ans.sx = ans.sx1;
                         ans.sy = ans.sy1;
                     }
@@ -343,33 +381,6 @@ class DrawThread extends Thread {
     @Override
     public void run() {
 
-        int ans_speed = 3;
-
-        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize(175);
-
-        Paint ansPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        ansPaint.setTextSize(175);
-        ansPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        ansPaint.getStrokeCap();
-        ansPaint.setColor(Color.RED);
-
-        Paint rec = new Paint(Paint.ANTI_ALIAS_FLAG);
-        rec.setTextSize(100);
-        rec.setStyle(Paint.Style.STROKE);
-        rec.setColor(Color.GREEN);
-        rec.setStrokeWidth(5);
-
-        Paint pb = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pb.setStyle(Paint.Style.STROKE);
-        pb.setColor(Color.BLACK);
-        pb.setStrokeWidth(8);
-
-        Paint pb1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pb1.setStyle(Paint.Style.FILL);
-        pb1.setColor(Color.GREEN);
-
-
         while (running) {
             Canvas canvas = surfaceHolder.lockCanvas();
             if (canvas != null) {
@@ -382,8 +393,12 @@ class DrawThread extends Thread {
                     right = canvas.getWidth()-canvas.getWidth()/10;
 
 
+                    width_one = left/108.0;
+                    height_one = top/226.0;
+
+
                     if (flag) {
-                        create(canvas, pb, pb1, ans_speed);
+                        create(canvas);
                     }
 
                     canvas.drawRect(left, top, right, bottom, rec);

@@ -16,4 +16,7 @@
     <string name="forty">40 tasks</string>
     <string name="fifty">50 tasks</string>
     <string name="statistic">Statistic</string>
+    <string name="clear_statistics">Clear statistics</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

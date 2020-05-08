@@ -3,12 +3,14 @@ package com.example.mathgame;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public class Task {
-    String task, solved_task, ans;
+class Task {
+    private String task;
+    String solved_task;
+    String ans;
     int color;
     boolean lock;
-    float x, y;
-    public Task(String task, String ans, int color, float x, float y) {
+    private float x, y;
+    Task(String task, String ans, int color, float x, float y) {
         this.ans = ans;
         this.task = task;
         this.color = color;
@@ -17,7 +19,7 @@ public class Task {
         this.x = x;
         this.y = y;
     }
-    public Task(Task another) {
+    Task(Task another) {
         this.ans = another.ans;
         this.task = another.task;
         this.y = another.y;

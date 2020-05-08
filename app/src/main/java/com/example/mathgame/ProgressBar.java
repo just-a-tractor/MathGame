@@ -1,9 +1,7 @@
 package com.example.mathgame;
 
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Bundle;
 
 class ProgressBar {
     Canvas canvas;

@@ -1,8 +1,6 @@
 package com.example.mathgame;
 
 import android.content.Context;
-import android.os.Build;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -16,6 +14,7 @@ public class MathGame extends SurfaceView implements SurfaceHolder.Callback {
     int n;
     int bound;
     boolean minus;
+
     public MathGame(Context context, int n, int bound, boolean minus) {
         super(context);
         this.context = context;
