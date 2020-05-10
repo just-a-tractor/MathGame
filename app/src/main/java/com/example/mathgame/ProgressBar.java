@@ -24,6 +24,7 @@ class ProgressBar {
     }
     boolean draw() {
         if(proc < 0)proc=0;
+        if(proc >= 100)proc=100;
         canvas.drawRect(l,canvas.getHeight()-canvas.getHeight()/15 ,
                 (float)(l + ((r-l)/100*proc)),
                 canvas.getHeight()-canvas.getHeight()/50, pb2);

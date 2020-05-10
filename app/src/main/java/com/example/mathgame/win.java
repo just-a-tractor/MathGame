@@ -1,27 +1,36 @@
 package com.example.mathgame;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class win extends AppCompatActivity implements View.OnClickListener {
     Button main_btn;
+    Button send;
     TextView text1;
     TextView text2;
     TextView text3;
     TextView text4;
+
+    int verbs;
+    int mistakes;
+    double time;
+    String difficult;
+    NumberFormat formatter;
+    double avg;
+
+    String info;
 
 
     private String readResults(ResultDBHelper resultDBHelper, String table_name){
@@ -38,14 +47,12 @@ public class win extends AppCompatActivity implements View.OnClickListener {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void writeResults(ResultDBHelper resultDBHelper, double time, int mistakes, int Q, String table_name){
         SQLiteDatabase database = resultDBHelper.getReadableDatabase();
         resultDBHelper.addResult(time, mistakes, Q, database, table_name);
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +62,10 @@ public class win extends AppCompatActivity implements View.OnClickListener {
 
 
         Bundle bundle = getIntent().getExtras();
-        int verbs = bundle.getInt("1");
-        int mistakes = bundle.getInt("2");
-        double time = bundle.getDouble("3");
-        String difficult = bundle.getString("4");
-        System.out.println(time);
+        verbs = bundle.getInt("1");
+        mistakes = bundle.getInt("2");
+        time = bundle.getDouble("3");
+        difficult = bundle.getString("4");
 
 
         ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy_mode", "medium_mode", "hard_mode", "impossible_mode"});
@@ -70,7 +76,8 @@ public class win extends AppCompatActivity implements View.OnClickListener {
 
         //resultDBHelper.getReadableDatabase().execSQL("delete from "+ difficult);
 
-        String info = readResults(resultDBHelper, difficult);
+        info = readResults(resultDBHelper, difficult);
+        avg = resultDBHelper.getStatistics(difficult);
         resultDBHelper.close();
 
         text1 = findViewById(R.id.textView1);
@@ -79,21 +86,44 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         text4 = findViewById(R.id.textView4);
 
 
-        NumberFormat formatter = new DecimalFormat("#0.00");
+        formatter = new DecimalFormat("#0.00");
 
-        text1.setText((formatter.format(time) + " seconds spent.") );
+        text1.setText((formatter.format(time) + " seconds spent."));
         text2.setText(((mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes") + " made."));
         text3.setText(formatter.format(verbs * 60 / time) + " tasks per minute.");
-        text4.setText(formatter.format(60 * resultDBHelper.getStatistics(difficult)) + " - average speed.");
+        text4.setText(formatter.format(60 * avg) + " - average speed.");
 
         main_btn = findViewById(R.id.main_btn);
         main_btn.setOnClickListener(this);
+        send = findViewById(R.id.send);
+        send.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, Menu.class);
-        startActivity(intent);
+        if (v.getId() == R.id.main_btn) {
+            Intent intent = new Intent(this, Menu.class);
+            startActivity(intent);
+        }
+        if (v.getId() == R.id.send) {
+
+            String send_text = difficult + "\n" + verbs + " correctly resolved tasks." + "\n" +
+                    (formatter.format(time) + " seconds spent.") + "\n"
+                    + (mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes") + " made." + "\n" +
+                    formatter.format(verbs * 60 / time) + " tasks per minute." + "\n" +
+                    formatter.format(60 * avg) + " - average speed.";
+
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            //i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"alex.gif2003@gmail.com"});
+            i.putExtra(Intent.EXTRA_SUBJECT, "Last try result:");
+            i.putExtra(Intent.EXTRA_TEXT, send_text);
+            try {
+                startActivity(Intent.createChooser(i, "Send result..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(win.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     @Override
     public void onBackPressed()

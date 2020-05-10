@@ -7,6 +7,7 @@
     android:theme="@android:style/Theme.NoTitleBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bad_image"
     tools:context=".win">
 
     <Button
@@ -18,7 +19,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintVertical_bias="0.9"
+        style="@style/my_button"/>
 
     <TextView
         android:id="@+id/textView1"
@@ -72,5 +74,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6"
         android:textColor="@color/black_overlay"/>
+
+    <Button
+        android:id="@+id/send"
+        style="@style/my_button"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
+        android:text="@string/send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

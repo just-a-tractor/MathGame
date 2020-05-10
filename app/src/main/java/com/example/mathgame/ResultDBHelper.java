@@ -6,8 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
-import androidx.annotation.RequiresApi;
 
 public class ResultDBHelper extends SQLiteOpenHelper {
 
@@ -37,7 +35,6 @@ public class ResultDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     void addResult(double time, int mistakes, int Q, SQLiteDatabase database, String table_name){
         ContentValues mMap = new ContentValues();
         mMap.put("time", time);

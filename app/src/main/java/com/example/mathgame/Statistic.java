@@ -30,7 +30,6 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
         ListView lv = findViewById(R.id.ListView);
         StatisticAdapter adapter = new StatisticAdapter(this, makeResult());
         lv.setAdapter(adapter);
-
     }
 
     private String readResults(ResultDBHelper resultDBHelper, String table_name, String column){

@@ -34,7 +34,6 @@ public class MathGame extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         drawThread = new DrawThread(getContext(),getHolder(),n, bound, minus);
-
         drawThread.start();
     }
 
