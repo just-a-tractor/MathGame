@@ -3,9 +3,11 @@ package com.example.mathgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     Button st_button;
     RadioGroup rg1;
     RadioGroup rg2;
+    Typeface font;
     int n = 10;
     int bound = 10;
     boolean m = false;
@@ -29,8 +32,15 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         main_btn.setOnClickListener(this);
         st_button = findViewById(R.id.st_button);
         st_button.setOnClickListener(this);
+        font = Typeface.createFromAsset(getAssets(), getString(R.string.font));
+        main_btn.setTypeface(font);
+        st_button.setTypeface(font);
 
         rg1 = findViewById(R.id.radio1);
+        ((RadioButton)findViewById(R.id.radioButton1)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton2)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton3)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton4)).setTypeface(font);
         rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -59,6 +69,11 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         });
 
         rg2 = findViewById(R.id.radio2);
+        ((RadioButton)findViewById(R.id.radioButton1s)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton2s)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton3s)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton4s)).setTypeface(font);
+        ((RadioButton)findViewById(R.id.radioButton5s)).setTypeface(font);
         rg2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

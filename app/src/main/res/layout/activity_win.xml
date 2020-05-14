@@ -12,15 +12,16 @@
 
     <Button
         android:id="@+id/main_btn"
-        android:layout_width="133dp"
+        style="@style/my_button"
+        android:layout_width="125dp"
         android:layout_height="61dp"
         android:text="@string/button"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9"
-        style="@style/my_button"/>
+        app:layout_constraintVertical_bias="0.87" />
 
     <TextView
         android:id="@+id/textView1"
@@ -33,7 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        android:textColor="@color/black_overlay"/>
+        android:textColor="@color/dark_blue"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -46,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4"
-        android:textColor="@color/black_overlay"/>
+        android:textColor="@color/dark_blue"/>
 
     <TextView
         android:id="@+id/textView3"
@@ -60,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        android:textColor="@color/black_overlay"/>
+        android:textColor="@color/dark_blue"/>
 
     <TextView
         android:id="@+id/textView4"
@@ -73,19 +74,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6"
-        android:textColor="@color/black_overlay"/>
+        android:textColor="@color/dark_blue"/>
 
     <Button
         android:id="@+id/send"
-        style="@style/my_button"
-        android:layout_width="100dp"
+        style="@style/my_button1"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
+        android:alpha="0.65"
         android:text="@string/send"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintTop_toBottomOf="@+id/main_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

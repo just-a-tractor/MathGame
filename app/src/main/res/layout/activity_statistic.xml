@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:name=".MyActivity"
@@ -8,26 +9,49 @@
     android:background="@drawable/bad_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Statistic">
-
-    <Button
-        android:id="@+id/clear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/clear_statistics"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95"
-        style="@style/my_button"/>
 
     <ListView
         android:id="@+id/ListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:text="" />
+
+    <Button
+        android:id="@+id/main_btn"
+        style="@style/my_button"
+        android:layout_width="125dp"
+        android:layout_height="61dp"
+        android:text="@string/button"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:id="@+id/clear"
+        style="@style/my_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:alpha="0.65"
+        android:text="@string/clear_statistics"
+        android:textSize="17sp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:text="" />
+
+</LinearLayout>

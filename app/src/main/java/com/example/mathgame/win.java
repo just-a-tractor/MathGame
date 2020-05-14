@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ public class win extends AppCompatActivity implements View.OnClickListener {
     TextView text2;
     TextView text3;
     TextView text4;
+    Typeface font;
 
     int verbs;
     int mistakes;
@@ -37,6 +39,7 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         SQLiteDatabase database = resultDBHelper.getReadableDatabase();
         Cursor cursor = resultDBHelper.readResults(database, table_name);
         StringBuilder info = new StringBuilder();
+        font = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         while (cursor.moveToNext()){
             String time = Double.toString(cursor.getDouble(cursor.getColumnIndex("time")));
             String mistakes = Integer.toString(cursor.getInt(cursor.getColumnIndex("mistakes")));
@@ -68,9 +71,9 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         difficult = bundle.getString("4");
 
 
-        ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy_mode", "medium_mode", "hard_mode", "impossible_mode"});
+        ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
 
-        // resultDBHelper.onUpgrade(resultDBHelper.getReadableDatabase(), 0, 1);
+        //resultDBHelper.onUpgrade(resultDBHelper.getReadableDatabase(), 0, 1);
 
         writeResults(resultDBHelper, time, mistakes, verbs, difficult);
 
@@ -86,7 +89,7 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         text4 = findViewById(R.id.textView4);
 
 
-        formatter = new DecimalFormat("#0.00");
+        formatter = new DecimalFormat("#0.0");
 
         text1.setText((formatter.format(time) + " seconds spent."));
         text2.setText(((mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes") + " made."));
@@ -97,6 +100,14 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         main_btn.setOnClickListener(this);
         send = findViewById(R.id.send);
         send.setOnClickListener(this);
+
+        main_btn.setTypeface(font);
+        send.setTypeface(font);
+
+        text1.setTypeface(font);
+        text2.setTypeface(font);
+        text3.setTypeface(font);
+        text4.setTypeface(font);
     }
 
     @Override

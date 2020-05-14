@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,17 +20,24 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
 
     ResultDBHelper resultDBHelper;
     Button clear;
+    Button main_btn;
+    Typeface font;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
-        resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy_mode", "medium_mode", "hard_mode", "impossible_mode"});
+        resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
         clear = findViewById(R.id.clear);
         clear.setOnClickListener(this);
+        main_btn = findViewById(R.id.main_btn);
+        main_btn.setOnClickListener(this);
+        font = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         ListView lv = findViewById(R.id.ListView);
         StatisticAdapter adapter = new StatisticAdapter(this, makeResult());
         lv.setAdapter(adapter);
+        main_btn.setTypeface(font);
+        clear.setTypeface(font);
     }
 
     private String readResults(ResultDBHelper resultDBHelper, String table_name, String column){
@@ -69,11 +77,11 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
 
 
 
-        String[] headArr = {"Easy_mode", "Medium_mode", "Hard_mode", "Impossible_mode"};
+        String[] headArr = {"Easy", "Medium", "Hard", "Maximum"};
         String[] qArr = new String[4];
         String[] mistakesArr = new String[4];
 
-        NumberFormat formatter = new DecimalFormat("#0.00");
+        NumberFormat formatter = new DecimalFormat("#0.0");
 
         for(int i = 0; i < 4; i++) {
             String a = headArr[i].toLowerCase();
@@ -84,9 +92,10 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
 
         for (int i = 0; i < arr.length; i++) {
             ModeResult res = new ModeResult();
-            res.head = headArr[i];
-            res.q = "Correctly resolved tasks: " + qArr[i];
-            res.mistakes = "Mistakes percent: " + ((mistakesArr[i].equals("не число") || mistakesArr[i].equals("NaN")) ? "0,00" : mistakesArr[i]) + "%";
+            res.head = headArr[i].equals("Easy") ? "Easy(a + b <= 10)" : (headArr[i].equals("Medium") ? "Medium(a ± b <= 10)"
+                    : (headArr[i].equals("Hard") ? "Hard(a ± b <= 20)" : "Maximum(a ± b <= 100)"));
+            res.q = "Total tasks: " + qArr[i];
+            res.mistakes = "Mistakes percent: " + ((mistakesArr[i].equals("не число") || mistakesArr[i].equals("NaN")) ? "0,0" : mistakesArr[i]) + "%";
             res.speed = "Average speed: " + formatter.format(60 * resultDBHelper.getStatistics(headArr[i].toLowerCase())) + " tasks per minute.";
             arr[i] = res;
         }
@@ -96,6 +105,10 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
     }
 
     public void onClick(View v) {
+        if (v.getId() == R.id.main_btn) {
+            Intent intent = new Intent(this, Menu.class);
+            startActivity(intent);
+        }
         if (v.getId() == R.id.clear) {
 
             new AlertDialog.Builder(this)

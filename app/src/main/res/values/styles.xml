@@ -29,6 +29,11 @@
         <item name="android:alpha">0.65</item>
     </style>
 
+    <style name="my_button1" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:alpha">0.65</item>
+    </style>
+
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">true</item>
