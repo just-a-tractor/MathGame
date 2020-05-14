@@ -52,10 +52,12 @@ public class StatisticAdapter extends ArrayAdapter<ModeResult> {
         for (TextView i: lst) {
             i.setTypeface(font);
             i.setTextSize(20);
-            //i.setTextColor(Color.rgb(160, 255, 255));
-            i.setTextColor(Color.rgb(150, 220, 240));
+            i.setTextColor(Color.rgb(160, 255, 255));
             }
         lst[0].setTextSize(25);
+        //lst[2].setTextColor(Color.rgb(0, 0, 120));
+        //lst[4].setTextColor(Color.rgb(0, 0, 120));
+        //lst[6].setTextColor(Color.rgb(0, 0, 120));
 
         return convertView;
     }

@@ -28,6 +28,8 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_menu);
+        ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
+        resultDBHelper.onCreate(resultDBHelper.getReadableDatabase());
         main_btn = findViewById(R.id.main_btn);
         main_btn.setOnClickListener(this);
         st_button = findViewById(R.id.st_button);
