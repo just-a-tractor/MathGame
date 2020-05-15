@@ -47,7 +47,7 @@ public class Ans {
         if (!spring) {
             if (x > right - 100*width_one*ans.length() || x < left)
                 sx = -sx;
-            if (y > bottom || y < top + 130*height_one)
+            if (y > bottom || y < top + 115*width_one)
                 sy = -sy;
         }
             x += sx;
