@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
@@ -28,8 +29,8 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_menu);
-        ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
-        resultDBHelper.onCreate(resultDBHelper.getReadableDatabase());
+        //ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
+        //resultDBHelper.onCreate(resultDBHelper.getReadableDatabase());
         main_btn = findViewById(R.id.main_btn);
         main_btn.setOnClickListener(this);
         st_button = findViewById(R.id.st_button);
@@ -37,6 +38,8 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         font = Typeface.createFromAsset(getAssets(), getString(R.string.font));
         main_btn.setTypeface(font);
         st_button.setTypeface(font);
+        ((TextView)findViewById(R.id.textView1)).setTypeface(font);
+        ((TextView)findViewById(R.id.textView2)).setTypeface(font);
 
         rg1 = findViewById(R.id.radio1);
         ((RadioButton)findViewById(R.id.radioButton1)).setTypeface(font);

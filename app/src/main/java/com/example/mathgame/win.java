@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 public class win extends AppCompatActivity implements View.OnClickListener {
     Button main_btn;
     Button send;
+    TextView text;
     TextView text1;
     TextView text2;
     TextView text3;
@@ -83,6 +84,7 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         avg = resultDBHelper.getStatistics(difficult);
         resultDBHelper.close();
 
+        text = findViewById(R.id.textView);
         text1 = findViewById(R.id.textView1);
         text2 = findViewById(R.id.textView2);
         text3 = findViewById(R.id.textView3);
@@ -91,10 +93,10 @@ public class win extends AppCompatActivity implements View.OnClickListener {
 
         formatter = new DecimalFormat("#0.0");
 
-        text1.setText((formatter.format(time) + " seconds spent."));
-        text2.setText(((mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes") + " made."));
-        text3.setText(formatter.format(verbs * 60 / time) + " tasks per minute.");
-        text4.setText(formatter.format(60 * avg) + " - average speed.");
+        text1.setText((verbs + (verbs == 1 ? " task" : " tasks")));
+        text2.setText(((mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes")));
+        text3.setText((formatter.format(time) + " seconds"));
+        text4.setText(formatter.format(verbs / avg) + " seconds in average");
 
         main_btn = findViewById(R.id.main_btn);
         main_btn.setOnClickListener(this);
@@ -104,6 +106,7 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         main_btn.setTypeface(font);
         send.setTypeface(font);
 
+        text.setTypeface(font);
         text1.setTypeface(font);
         text2.setTypeface(font);
         text3.setTypeface(font);
@@ -118,14 +121,20 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         }
         if (v.getId() == R.id.send) {
 
-            String send_text = difficult + "\n" + verbs + " correctly resolved tasks." + "\n" +
-                    (formatter.format(time) + " seconds spent.") + "\n"
-                    + (mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes") + " made." + "\n" +
-                    formatter.format(verbs * 60 / time) + " tasks per minute." + "\n" +
-                    formatter.format(60 * avg) + " - average speed.";
+            String dif = (difficult.equals("easy") ? "Easy mode (a + b <= 10)" :
+                    (difficult.equals("medium") ? "Medium mode (a ± b <= 10)" :
+                            (difficult.equals("hard") ? "Hard mode (a ± b <= 20)" :
+                                    "Maximum mode (a ± b <= 100)")));
+
+            String send_text = dif + "\n" + verbs + " correctly resolved tasks" + "\n" +
+                    (mistakes == 0 ? "No" : mistakes) + (mistakes == 1 ? " mistake" : " mistakes") + " made" + "\n" +
+                    (formatter.format(time) + " seconds spent") + "\n" +
+                    formatter.format(verbs / avg) + " - average time" + "\n" +
+                    formatter.format(verbs * 60 / time) + " tasks per minute" + "\n" +
+                    formatter.format(60 * avg) + " - average speed";
 
             Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("message/rfc822");
+            i.setType("text/plain");
             //i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"alex.gif2003@gmail.com"});
             i.putExtra(Intent.EXTRA_SUBJECT, "Last try result:");
             i.putExtra(Intent.EXTRA_TEXT, send_text);

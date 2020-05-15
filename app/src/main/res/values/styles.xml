@@ -16,11 +16,11 @@
     </style>
 
     <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/custom_btn_radio</item>
+        <item name="android:button">@drawable/custom_btn</item>
     </style>
 
     <style name="custom_radio1" parent="@android:style/Widget.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/custom_radio1</item>
+        <item name="android:button">@drawable/custom_btn1</item>
     </style>
 
     <style name="my_button" parent="Widget.AppCompat.Button.Colored">

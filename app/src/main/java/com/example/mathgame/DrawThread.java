@@ -175,7 +175,7 @@ class DrawThread extends Thread {
                 t_l1.add(ans1);
             test_l[a] = ans1;
             t_l[a] = first + (first.length() == 1 ? " " : "") + sign +
-                    (second.length() == 1 ? " " : "") + second + " = __";
+                    (second.length() == 1 ? " " : "") + second + " = _";
         }
         tasks = new Task[n];
         String[] t_l1s = new String[t_l1.size()];
@@ -183,7 +183,7 @@ class DrawThread extends Thread {
 
         for (int i = 0; i<t_l.length; i++){
             tasks[i] = new Task(t_l[i], test_l[i], new Paint(textPaint), dark_blue,
-                    left + canvas.getWidth()/50,
+                    left + canvas.getWidth()/10,
                     bottom + canvas.getHeight()/10 + (canvas.getHeight()/15));
         }
 
@@ -237,8 +237,11 @@ class DrawThread extends Thread {
 
 
     private void miss(Vibrator v, boolean change) {
-        show_task.x1 = left/2;
-        show_task.x2 = left*2;
+        System.out.println(show_task.def_x);
+        System.out.println(left);
+        System.out.println(left*3);
+        show_task.x1 = left;
+        show_task.x2 = left*3;
         show_task.miss = true;
         long[] mVibratePattern = new long[]{0, 100, 50, 275};
         v.vibrate(mVibratePattern, -1);
@@ -440,7 +443,6 @@ class DrawThread extends Thread {
                         solved_task.draw(canvas);
                     }
 
-                    System.out.println(textPaint.getTextSize());
                     show_task.setPaint(new Paint(textPaint));
                     show_task.draw(canvas);
                     int a = random.nextInt(tasks.length);

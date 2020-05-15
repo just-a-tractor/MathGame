@@ -36,19 +36,19 @@ public class StatisticAdapter extends ArrayAdapter<ModeResult> {
                 (TextView) convertView.findViewById(R.id.text3s),
                 (TextView) convertView.findViewById(R.id.text4),
                 (TextView) convertView.findViewById(R.id.text4s)};
-        lst[0].setText((" " + md.head));
+        lst[0].setText((md.head));
         String a1 = md.q.substring(0, md.q.indexOf(":")+1);
         String a2 = md.q.substring(md.q.indexOf(":")+1);
-        lst[1].setText((" " + a1));
+        lst[1].setText((a1));
         lst[2].setText((" " + a2));
         String b1 = md.speed.substring(0, md.speed.indexOf(":")+1);
         String b2 = md.speed.substring(md.speed.indexOf(":")+1);
-        lst[3].setText((" " + b1));
-        lst[4].setText((" " + b2));
+        lst[3].setText((b1));
+        lst[4].setText((b2));
         String c1 = md.mistakes.substring(0, md.mistakes.indexOf(":")+1);
         String c2 = md.mistakes.substring(md.mistakes.indexOf(":")+1);
-        lst[5].setText((" " + c1));
-        lst[6].setText((" " + c2));
+        lst[5].setText((c1));
+        lst[6].setText((c2));
         for (TextView i: lst) {
             i.setTypeface(font);
             i.setTextSize(20);

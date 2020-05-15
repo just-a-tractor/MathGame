@@ -13,10 +13,6 @@ class Task {
     double x1, x2; // for miss
     double h_x, h_y; // for hit
 
-    public Paint getPaint() {
-        return paint;
-    }
-
     void setPaint(Paint paint) {
         this.paint = paint;
     }
@@ -35,7 +31,7 @@ class Task {
         this.color = color;
         this.paint = paint;
         this.lock = false;
-        this.solved_task = task.substring(0, task.length() - 2) + ans;
+        this.solved_task = task.substring(0, task.length() - 1) + ans;
         this.x = x;
         this.y = y;
         def_x = x;
@@ -48,7 +44,7 @@ class Task {
         this.y = another.y;
         this.x = another.x;
         this.color = another.color;
-        this.solved_task = task.substring(0, task.length() - 2) + ans;
+        this.solved_task = task.substring(0, task.length() - 1) + ans;
         this.lock = another.lock;
         this.paint = another.paint;
         this.hit = another.hit;

@@ -96,11 +96,9 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
                     : (headArr[i].equals("Hard") ? "Hard(a ± b <= 20)" : "Maximum(a ± b <= 100)"));
             res.q = "Total tasks: " + qArr[i];
             res.mistakes = "Mistakes percent: " + ((mistakesArr[i].equals("не число") || mistakesArr[i].equals("NaN")) ? "0,0" : mistakesArr[i]) + "%";
-            res.speed = "Average speed: " + formatter.format(60 * resultDBHelper.getStatistics(headArr[i].toLowerCase())) + " tasks per minute.";
+            res.speed = "Average speed: " + formatter.format(60 * resultDBHelper.getStatistics(headArr[i].toLowerCase())) + " tasks per minute";
             arr[i] = res;
         }
-        for (ModeResult i: arr)
-        System.out.println(i);
         return arr;
     }
 
