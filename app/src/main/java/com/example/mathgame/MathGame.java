@@ -8,7 +8,7 @@ import android.view.SurfaceView;
 
 
 public class MathGame extends SurfaceView implements SurfaceHolder.Callback {
-    private DrawThread drawThread;
+    DrawThread drawThread;
     Context context;
     Vibrator v;
     int n;

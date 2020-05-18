@@ -320,7 +320,7 @@ class DrawThread extends Thread {
 
                 for (Ans i:show_ans) {
                     if (x >= i.x-50*width_one && x <= i.x+125*width_one*i.ans.length() &&
-                            y >= i.y-130*height_one && y <= i.y+75*height_one)
+                            y >= i.y-130*height_one && y <= i.y+75*width_one)
                     {
                         ans = i;
                         break;
