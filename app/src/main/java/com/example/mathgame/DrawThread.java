@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.MotionEvent;
@@ -61,6 +62,7 @@ class DrawThread extends Thread {
     private int n;
     private int bound;
     private boolean minus;
+    private MediaPlayer mediaPlayer;
 
     private float left;
     private float top;
@@ -91,6 +93,7 @@ class DrawThread extends Thread {
         bundle.putInt("2", mistakes);
         bundle.putDouble("3", (Calendar.getInstance().getTimeInMillis() - currentTime)/ 1000.0);
         bundle.putString("4", difficult);
+        bundle.putInt("5", mediaPlayer.getCurrentPosition());
         intent.putExtras(bundle);
         mainActivity.startActivity(intent);
         this.running = false;
@@ -263,12 +266,13 @@ class DrawThread extends Thread {
     }
 
 
-    DrawThread(Context context, SurfaceHolder surfaceHolder, int n, int bound, boolean minus) {
+    DrawThread(Context context, SurfaceHolder surfaceHolder, int n, int bound, boolean minus, MediaPlayer mediaPlayer) {
         this.surfaceHolder = surfaceHolder;
         this.n = n;
         this.bound = bound;
         this.minus = minus;
         this.mainActivity = context;
+        this.mediaPlayer = mediaPlayer;
     }
 
 

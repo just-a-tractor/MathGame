@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,8 @@ public class win extends AppCompatActivity implements View.OnClickListener {
     double avg;
 
     String info;
+    int length = 0;
+    MediaPlayer mediaPlayer;
 
 
     private String readResults(ResultDBHelper resultDBHelper, String table_name){
@@ -70,7 +73,11 @@ public class win extends AppCompatActivity implements View.OnClickListener {
         mistakes = bundle.getInt("2");
         time = bundle.getDouble("3");
         difficult = bundle.getString("4");
+        length = bundle.getInt("5");
 
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.relaxing1);
+        mediaPlayer.seekTo(length);
+        mediaPlayer.start();
 
         ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
 
@@ -114,9 +121,28 @@ public class win extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+        length = mediaPlayer.getCurrentPosition();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mediaPlayer.seekTo(length);
+        mediaPlayer.start();
+    }
+
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.main_btn) {
+            Bundle bundle = new Bundle();
+            length = mediaPlayer.getCurrentPosition();
+            bundle.putInt("stuff", length);
             Intent intent = new Intent(this, Menu.class);
+            intent.putExtras(bundle);
             startActivity(intent);
         }
         if (v.getId() == R.id.send) {
@@ -149,7 +175,11 @@ public class win extends AppCompatActivity implements View.OnClickListener {
     public void onBackPressed()
     {
         super.onBackPressed();
+        Bundle bundle = new Bundle();
+        length = mediaPlayer.getCurrentPosition();
+        bundle.putInt("stuff", length);
         Intent intent = new Intent(this, Menu.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

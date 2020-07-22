@@ -16,6 +16,11 @@ public class StatisticAdapter extends ArrayAdapter<ModeResult> {
         super(context, R.layout.adapter_item, arr);
     }
 
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
+
     @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

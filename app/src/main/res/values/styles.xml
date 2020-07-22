@@ -23,6 +23,16 @@
         <item name="android:button">@drawable/custom_btn1</item>
     </style>
 
+    <style name="StrokeText">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">3</item>
+        <item name="android:shadowDy">3</item>
+        <item name="android:shadowRadius">3</item>
+    </style>
+
     <style name="my_button" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/dark_blue</item>
         <item name="android:background">@drawable/button</item>
