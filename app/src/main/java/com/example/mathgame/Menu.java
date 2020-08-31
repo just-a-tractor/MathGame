@@ -22,24 +22,12 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     Typeface font;
     int n = 10;
     int bound = 10;
-    int length = 0;
     boolean m = false;
     private boolean exit_flag;
-    public MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            length = bundle.getInt("stuff");
-        }
-
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.relaxing1);
-        mediaPlayer.seekTo(length);
-        mediaPlayer.start();
-
 
         setContentView(R.layout.activity_menu);
         //ResultDBHelper resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
@@ -62,6 +50,8 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.exit);
+                mediaPlayer.start();
                 switch (checkedId) {
                     case R.id.radioButton1:
                         bound = 10;
@@ -95,6 +85,9 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         rg2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.exit);
+                mediaPlayer.start();
+
                 switch (checkedId) {
                     case R.id.radioButton1s:
                         n = 10;
@@ -121,41 +114,24 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mediaPlayer.pause();
-        length = mediaPlayer.getCurrentPosition();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mediaPlayer.seekTo(length);
-        mediaPlayer.start();
-    }
-
-    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.main_btn) {
             Intent intent = new Intent(this, MainActivity.class);
+
+            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.button2);
+            mediaPlayer.start();
+
 
             Bundle bundle = new Bundle();
             bundle.putInt("stuff1", n);
             bundle.putInt("stuff2", bound);
             bundle.putBoolean("stuff3", m);
-            length = mediaPlayer.getCurrentPosition();
-            bundle.putInt("stuff4", length);
             intent.putExtras(bundle);
 
             startActivity(intent);
         }
         if (v.getId() == R.id.st_button) {
             Intent intent = new Intent(this, Statistic.class);
-            length = mediaPlayer.getCurrentPosition();
-            Bundle bundle = new Bundle();
-            bundle.putInt("stuff", length);
-            intent.putExtras(bundle);
             startActivity(intent);
         }
 

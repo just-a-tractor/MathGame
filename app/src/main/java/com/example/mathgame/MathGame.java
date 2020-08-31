@@ -1,7 +1,6 @@
 package com.example.mathgame;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,17 +13,15 @@ public class MathGame extends SurfaceView implements SurfaceHolder.Callback {
     Vibrator v;
     int n;
     int bound;
-    MediaPlayer mediaPlayer;
     boolean minus;
 
-    public MathGame(Context context, int n, int bound, boolean minus, MediaPlayer mediaPlayer) {
+    public MathGame(Context context, int n, int bound, boolean minus) {
         super(context);
         this.context = context;
         getHolder().addCallback(this);
         this.n = n;
         this.bound = bound;
         this.minus = minus;
-        this.mediaPlayer = mediaPlayer;
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -36,7 +33,7 @@ public class MathGame extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        drawThread = new DrawThread(getContext(),getHolder(),n, bound, minus, mediaPlayer);
+        drawThread = new DrawThread(getContext(),getHolder(),n, bound, minus);
         drawThread.start();
     }
 

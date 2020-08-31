@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,18 +25,12 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
     TextView tv;
     Typeface font;
     int length = 0;
-    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
         Bundle bundle = getIntent().getExtras();
-        length = bundle.getInt("stuff");
-
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.relaxing1);
-        mediaPlayer.seekTo(length);
-        mediaPlayer.start();
 
         resultDBHelper = new ResultDBHelper(getApplicationContext(), new String[] {"easy", "medium", "hard", "maximum"});
         clear = findViewById(R.id.clear);
@@ -85,21 +78,6 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
         return s;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mediaPlayer.pause();
-        length = mediaPlayer.getCurrentPosition();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mediaPlayer.seekTo(length);
-        mediaPlayer.start();
-    }
-
     ModeResult[] makeResult() {
 
         ModeResult[] arr = new ModeResult[4];
@@ -133,11 +111,7 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
 
     public void onClick(View v) {
         if (v.getId() == R.id.main_btn) {
-            Bundle bundle = new Bundle();
-            length = mediaPlayer.getCurrentPosition();
-            bundle.putInt("stuff", length);
             Intent intent = new Intent(this, Menu.class);
-            intent.putExtras(bundle);
             startActivity(intent);
         }
         if (v.getId() == R.id.clear) {
@@ -162,11 +136,7 @@ public class Statistic extends AppCompatActivity implements View.OnClickListener
     public void onBackPressed()
     {
         super.onBackPressed();
-        Bundle bundle = new Bundle();
-        length = mediaPlayer.getCurrentPosition();
-        bundle.putInt("stuff", length);
         Intent intent = new Intent(this, Menu.class);
-        intent.putExtras(bundle);
         startActivity(intent);
     }
 }
