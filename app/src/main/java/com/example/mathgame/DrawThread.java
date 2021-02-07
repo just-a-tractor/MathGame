@@ -96,24 +96,46 @@ class DrawThread extends Thread {
         this.running = false;
     }
 
-    private String[] task_gen(int n, int bound, boolean minus){
+    int gen_sec(int num){
+        int ans = random.nextInt(num - 2) + 2;
+        if (num-1 % 2 == 0){
+            int c1 = num/2; // center 1
+            int c2 = (num/2)+1; // center 2
+            if (ans == c1 || ans == c2){
+                return ans;
+            }
+        }
+        else{
+            int c = num/2 + 1; // center
+            if (ans == c) {
+                return ans;
+            }
+        }
+        long count = Math.round(num / 6.0);
+        if (ans <= count || ans >= num-count-1){
+            ans = random.nextInt(num - 2) + 2;
+            if (ans <= count || ans >= num-count-1){
+                ans = random.nextInt(num - 2) + 2;
+            }
+            return ans;
+        }
+        else {
+            return random.nextInt(num - 2) + 2;
+        }
+    }
 
-        String[] ans = new String[n];
+    private String[] task_gen(int bound, boolean minus){
 
-        for (int i=0; i<n; i++){
+        String[] ans = new String[50];
+
+        for (int i=0; i<50; i++){
             String sign = (minus ? (new String[]{"-", "+"}[random.nextInt(2)]) : "+");
-            if (sign.equals("+")) {
-                int c = random.nextInt(bound - 1) + 2;
-                int a = random.nextInt(c - 1) + 1;
-                int b = c - a;
-                ans[i] = (a >= b ? a + " " + b + " " + sign : b + " " + a + " " + sign);
-            }
-            else {
-                int a = random.nextInt(bound - 1) + 2;
-                int c = random.nextInt(a - 1) + 1;
-                int b = a - c;
-                ans[i] = (b >= c ? b + " " + c + " " + sign : c + " " + b + " " + sign);
-            }
+            int c = random.nextInt(bound - 3) + 4;
+            int a = gen_sec(c);
+            System.out.println(a);
+            System.out.println(c);
+            int b = c - a; // a + b = c (+); c - b = a (-)
+            ans[i] = (a >= b ? a + " " + b + " " + sign : b + " " + a + " " + sign);
         }
         return ans;
     }
@@ -157,7 +179,7 @@ class DrawThread extends Thread {
 
         prog = new ProgressBar(canvas, left, right, top, bottom, pb, pb1, 0.0);
 
-        String[] raw = task_gen(n, bound, minus);
+        String[] raw = task_gen(bound, minus);
 
         String[] t_l = new String[n];
         String[] test_l = new String[n];
@@ -456,6 +478,7 @@ class DrawThread extends Thread {
                             show_ans.clear();
                             for (Ans i : ans_list) {
                                 if (i.ans.equals(show_task.ans)) {
+                                    i.check(top, bottom, left, right);
                                     show_ans.add(i);
                                     break;
                                 }

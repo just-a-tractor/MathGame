@@ -33,6 +33,13 @@ public class Ans {
         sy = width_one*30*(s_y-this.y)/Math.sqrt(Math.pow(s_x-this.x, 2) + Math.pow(s_y-this.y, 2));
     }
 
+    void check(float top, float bottom, float left, float right) {
+        if (x > right - 100*width_one*ans.length()*0.8 || x < left || y > bottom || y < top + 115*width_one) {
+            x = (int)(left + Math.random()*(right-100*width_one*ans.length()-left));
+            y = (int)(top + 130*height_one + Math.random()*(bottom-top-150*height_one));
+        }
+    }
+
     void draw(Canvas canvas, Paint paint, float top, float bottom, float left, float right) {
         if (spring)  {
             if (x >= s_x-20*width_one && y >= s_y-20*height_one && x <= s_x+20*width_one && y <= s_y+20*height_one) {

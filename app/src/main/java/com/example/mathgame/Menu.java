@@ -69,7 +69,6 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
                         bound = 100;
                         m = true;
                         break;
-
                     default:
                         break;
                 }
